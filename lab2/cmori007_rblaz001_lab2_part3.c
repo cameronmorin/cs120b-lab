@@ -1,5 +1,5 @@
 /*	Partner(s) Name & E-mail: Cameron Morin cmori007@ucr.edu
-						      Raudel Blazquez Munos rblaz001@ucr.edu
+						      Raudel Blazquez Munoz rblaz001@ucr.edu
  *	Lab Section: 21
  *	Assignment: Lab 2  Exercise 3 
  *	Exercise Description: Parking Garage Sensor

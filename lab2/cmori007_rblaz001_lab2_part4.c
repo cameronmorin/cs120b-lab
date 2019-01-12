@@ -1,7 +1,8 @@
 /*	Partner(s) Name & E-mail: Cameron Morin cmori007@ucr.edu
- *
+						      Raudel Blazquez Munoz rblaz001@ucr.edu
  *	Lab Section: 21
- *	Assignment: Lab # 2 Exercise # 2
+ *	Assignment: Lab 2  Exercise 4 
+ *	Exercise Description: Amusement Park Weight Sensor
  *	
  *	I acknowledge all content contained herein, excluding template or example
  *	code, is my own original work.
