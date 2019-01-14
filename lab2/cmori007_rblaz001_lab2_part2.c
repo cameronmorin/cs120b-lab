@@ -12,7 +12,7 @@
 int main(void)
 {
 	DDRC = 0xFF; // Configure port C's 8 pins as outputs
-	PORTC = 0x00; // Initialize PORTC output to 0�s
+	PORTC = 0x00; // Initialize PORTC output to 0's
 	unsigned char tmpA = 0x00; //Temporary value to hold the value of A
 	unsigned char tmpC = 0x00; //Temporary value to hold the value of C
 	while(1)
