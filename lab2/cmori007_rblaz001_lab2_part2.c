@@ -1,7 +1,7 @@
 /*	Partner(s) Name & E-mail: Cameron Morin cmori007@ucr.edu
 						      Raudel Blazquez Munoz rblaz001@ucr.edu
  *	Lab Section: 21
- *	Assignment: Lab 2  Exercise 3 
+ *	Assignment: Lab 2  Exercise 2 
  *	Exercise Description: Parking Garage Sensor
  *	
  *	I acknowledge all content contained herein, excluding template or example
@@ -12,7 +12,7 @@
 int main(void)
 {
 	DDRC = 0xFF; // Configure port C's 8 pins as outputs
-	PORTC = 0x00; // Initialize PORTC output to 0’s
+	PORTC = 0x00; // Initialize PORTC output to 0ï¿½s
 	unsigned char tmpA = 0x00; //Temporary value to hold the value of A
 	unsigned char tmpC = 0x00; //Temporary value to hold the value of C
 	while(1)
