@@ -1,9 +1,9 @@
 /*	Partner(s) Name & E-mail: Cameron Morin cmori007@ucr.edu
 						      Raudel Blazquez Munoz rblaz001@ucr.edu
  *	Lab Section: 21
- *	Assignment: Lab 4  Exercise 1 
- *	Exercise Description: A system with two LEDs and one button. One LED is always on
- *						  by pressing and releasing the button, the active LED turns off and the other turns on.
+ *	Assignment: Lab 4  Exercise 4
+ *	Exercise Description: A passcode system extending on exercise 3, but reentering the comnination
+	will also lock the door.
  *	
  *	I acknowledge all content contained herein, excluding template or example
  *	code, is my own original work.

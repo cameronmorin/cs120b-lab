@@ -61,7 +61,8 @@ void Tick(){
 			case state4:		//B0 = 1; B1 = 0;
 				PORTB = SetBit(PORTB, 0, 1);
 				PORTB = SetBit(PORTB, 1, 0);
-				default:
+				break;
+			default:
 				break;
 		}
 		
