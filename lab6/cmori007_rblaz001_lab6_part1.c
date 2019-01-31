@@ -6,26 +6,16 @@
 
 //Temporary variable used to hold input
 
-unsigned char tmpA;
+unsigned char tmpA = 0x00;
 
-unsigned char tmpB;
+unsigned char tmpB = 0x00;
 
 
 enum States {Start, one, two, three} state;
 
 
 
-void Tick(){
-
-	
-
-	tmpA = ~PINA & 0x01;
-
-	
-
-	tmpB = PORTB;
-
-	
+void Tick(){	
 
 	switch(state){
 

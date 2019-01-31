@@ -6,9 +6,9 @@
 
 //Temporary variable used to hold input
 
-unsigned char tmpA;
+unsigned char tmpA = 0x00;
 
-unsigned char tmpB;
+unsigned char tmpB = 0x00;
 
 unsigned char bLeft; //Bit 0 used to determine if sequence is going right or left
 
@@ -22,12 +22,6 @@ void Tick(){
 	
 
 	tmpA = ~PINA & 0x01;
-
-	
-
-	tmpB = PORTB;
-
-	
 
 	switch(state){
 
@@ -47,7 +41,7 @@ void Tick(){
 
 		case ST_B1:
 			if(!tmpA){
-				state = bLeft ? ST_B1 : ST_B0;
+				state = bLeft ? ST_B2 : ST_B0;
 			}
 			else{
 				state = ST_wait;
