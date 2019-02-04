@@ -46,7 +46,7 @@ void Tick(){
 			state = wait;   //Initialize to wait state
 			LCD_ClearScreen();
 			LCD_Cursor(1);
-			LCD_WriteData(tmpB);
+			LCD_WriteData('0');
 			break;
 		case wait:
 			//Remain in wait state if no button is pressed
@@ -70,7 +70,6 @@ void Tick(){
 				state = rst;
 				tmpB = 0;
 			}
-			LCD_WriteData(tmpB);
 			break;
 		case inc:
 			//if button is released enter wait sate and increment B if less than 9
@@ -110,7 +109,6 @@ void Tick(){
 				state = rst;
 				tmpB = 0;
 			}
-			LCD_WriteData(tmpB);
 			break;
 		case dec:
 			//if A1 is released set cnt to 0, set state to wait, and decrement B if B is greater than 0
@@ -151,7 +149,6 @@ void Tick(){
 				state = rst;
 				tmpB = 0;
 			}
-			LCD_WriteData(tmpB);
 			break;
 		case rst:
 			//if both A0 & A1 is released enter wait state
@@ -174,6 +171,7 @@ void Tick(){
 		default:
 			break;
 	}
+	LCD_WriteData(tmpB + '0');
 	PORTB = tmpB;	
 }
 
