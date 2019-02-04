@@ -12,7 +12,7 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <timer.h>
-#include <avr/io.h>
+#include "io.c"
 
 //Temporary variable used to hold input
 
