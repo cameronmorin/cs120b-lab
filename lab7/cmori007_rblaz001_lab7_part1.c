@@ -13,6 +13,7 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <timer.h>
+#include <avr/io.h>
 
 //Bit access function
 unsigned char SetBit(unsigned char x, unsigned char k, unsigned char b) {
