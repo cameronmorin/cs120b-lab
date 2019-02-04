@@ -38,6 +38,7 @@ void Tick(){
 		
 		case Start:
 			state = ST_B0;  //Initialize to state ST_B0
+			LCD_WriteData('0');
 			break;
 
 		case ST_B0:
@@ -139,7 +140,7 @@ void Tick(){
 			break;
 		
 		case ST_wait:	
-			LCD_Cursor(0);
+			LCD_Cursor(1);
 			LCD_WriteData(cnt + '0');
 			break;
 		
@@ -148,7 +149,7 @@ void Tick(){
 			
 		case ST_victory:
 			cnt = 0;
-			LCD_DisplayString(0, "Winner")
+			LCD_DisplayString(1, "Winner")
 			break;
 
 		default:
@@ -178,7 +179,7 @@ int main(void){
 	state = Start;
 	cnt = 0;
 	LCD_ClearScreen();
-	LCD_Cursor(0);
+	LCD_Cursor(1);
 	
 	TimerSet(300);
 	TimerOn();
