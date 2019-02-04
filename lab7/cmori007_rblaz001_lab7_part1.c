@@ -44,6 +44,9 @@ void Tick(){
 	switch(state){
 		case Start:
 			state = wait;   //Initialize to wait state
+			LCD_ClearScreen();
+			LCD_Cursor(1);
+			LCD_WriteData(tmpB);
 			break;
 		case wait:
 			//Remain in wait state if no button is pressed
@@ -67,6 +70,7 @@ void Tick(){
 				state = rst;
 				tmpB = 0;
 			}
+			LCD_WriteData(tmpB);
 			break;
 		case inc:
 			//if button is released enter wait sate and increment B if less than 9
@@ -74,14 +78,15 @@ void Tick(){
 				state = wait;
 				if(tmpB < 9){
 					tmpB++;
-				}				
+				}
 				break;
 			} 
 			//if A0 remains pressed, remain in inc state for 1 second and increment B if less than 9 and return to wait
 			else if(bA0 && !bA1){
 				if(cnt < 20){
 					cnt++;
-				}else{
+				}
+				else{
 					cnt = 0;
 					state = wait;
 					if(tmpB < 9){
@@ -105,6 +110,7 @@ void Tick(){
 				state = rst;
 				tmpB = 0;
 			}
+			LCD_WriteData(tmpB);
 			break;
 		case dec:
 			//if A1 is released set cnt to 0, set state to wait, and decrement B if B is greater than 0
@@ -145,6 +151,7 @@ void Tick(){
 				state = rst;
 				tmpB = 0;
 			}
+			LCD_WriteData(tmpB);
 			break;
 		case rst:
 			//if both A0 & A1 is released enter wait state
