@@ -125,7 +125,8 @@ void Tick(){
     }
 
 	PORTB = tmpB;	
-
+    LCD_Cursor(1);
+    LCD_WriteData(tmpB + '0');
 }
 
 
