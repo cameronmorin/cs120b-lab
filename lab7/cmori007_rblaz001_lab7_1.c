@@ -1,74 +1,39 @@
 /*	Partner(s) Name & E-mail: Cameron Morin cmori007@ucr.edu
-
-						      Raudel Blazquez Munoz rblaz001@ucr.edu
+Raudel Blazquez Munoz rblaz001@ucr.edu
 
  *	Lab Section: 21
-
  *	Assignment: Lab 7  Exercise 1
-
  *	Exercise Description: Two buttons are connected to increment and decrement a count.
-
 	if the count exceeds 9, it does not increase. If the tries to decrease lower than 0, it stays
-
 	at 0. If both buttons are pressed, the count is reset to 0. If a button is held the count is updated every second.
-
  *	
-
  *	I acknowledge all content contained herein, excluding template or example
-
  *	code, is my own original work.
-
  */
 
 
 
 #include <avr/io.h>
-
 #include <avr/interrupt.h>
-
 #include <timer.h>
-
 #include "io.c"
 
-
-
 //Bit access function
-
 unsigned char SetBit(unsigned char x, unsigned char k, unsigned char b) {
-
 	return (b ? x | (0x01 << k) : x & ~(0x01 << k));
-
 }
-
 unsigned char GetBit(unsigned char x, unsigned char k) {
-
 	return ((x & (0x01 << k)) != 0);
-
 }
-
-
 
 //Temporary variable used to hold input
-
 unsigned char bA0;   //Variable to track the 1 bit input A0
-
 unsigned char bA1;   //Variable to track the 1 bit input A1
-
 unsigned char tmpA;  //Variable to track the 8 bit input A
-
-
-
-
-
 unsigned char tmpB;	  //Variable to track the 8 bit output B
-
 unsigned char cnt;    //Variable used to track how long button is pressed
-
-
-
 enum States {Start, wait, inc, dec, rst} state;
 
-	
 
 void Tick(){
 	tmpA = ~PINA;				//Flip the input since the button is set up in pull up mode
