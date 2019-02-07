@@ -1,0 +1,2 @@
+Set MAX value to 128
+Change the if statements to else if statements

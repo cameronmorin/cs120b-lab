@@ -47,13 +47,13 @@ void Tick(){
             state = wait;
 			break;
 		case wait:
-			if(bA0){                //Increase count
+			if(bA0 && !bA1){                //Increase count
 				state = inc;
 				cnt = 0;
                 tmpB++;
 				break;
 			}
-            else if(bA1){           //Decrease count
+            else if(bA1 && !bA0){           //Decrease count
 				state = dec;
 				cnt = 0;
                 tmpB--;
