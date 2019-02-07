@@ -17,144 +17,139 @@
 //Temporary variable used to hold input
 
 unsigned char tmpA = 0x00;
-
 unsigned char tmpB = 0x00;
-
-unsigned char bLeft; //Bit 0 used to determine if sequence is going right or left
+unsigned char win;
+unsigned char score;
 unsigned char cnt;
+unsigned char x;
+unsigned char from;
+enum States {Start, L1, L2, L3, PRESS, WAIT_1, WAIT_2} state;
 
 
-enum States {Start, ST_B0, ST_B1, ST_B2, ST_wait, ST_pause, ST_victory} state;
-
-
+void press(const unsigned char n) {
+	if (n == 0) {
+		if (score > 0) {
+			score--;
+			LCD_WriteData(score + '0');
+		}
+	}
+	else {
+		if (score == 8) {
+			score = 5;
+			LCD_ClearScreen();
+			LCD_DisplayString(1, "Winner!!");
+			win = 1;
+		}
+		else {
+			score++;
+			LCD_WriteData(score + '0');
+		}
+	}
+}
 
 void Tick(){
-
-	
-
 	tmpA = ~PINA & 0x01;
 
-	switch(state){
-		
+	switch(state) {
 		case Start:
-			state = ST_B0;  //Initialize to state ST_B0
-			LCD_WriteData('0');
-			break;
-
-		case ST_B0:
-			//if button is not pressed continue sequence
-			if(!tmpA){
-				state = ST_B1;
-				bLeft = 0x01;
-			}
-			//if button is pressed cnt is decremented and set state to ST_wait, incorrect timing
-			else{
-				if(cnt > 0){
-					cnt--;
-				}
-				state = ST_wait;
-			}
-			break;
-
-		case ST_B1:
-			//if button is not pressed continue sequence depending on bLeft
-			if(!tmpA){
-				state = bLeft ? ST_B2 : ST_B0;
-			}
-			//if button is pressed cnt is incremented and state is set to wait, correct timing
-			else{
-				if(cnt < 9){
-					cnt++;
-				}
-				
-				if(cnt = 9){
-					state = ST_victory;
-					break;
-				}
-				state = ST_wait;
-			}
-			break;
-			
-		case ST_B2:
-			//if button is not pressed continue sequence depending on left
-			if(!tmpA){
-				state = ST_B1;
-				bLeft = 0x00;
-			
-			//if button is pressed cnt is decremented and state is set to wait, decrement timing
-			else{
-				if(cnt > 0){
-					cnt--;
-				}
-				state = ST_wait;
-			}
-			break;
-			
-		case ST_wait:
-			//if button remains pressed remain in state waiting
-			if (tmpA){
-				break;
-			}
-			//else state is set to ST_pause
-			state = ST_pause;
-			break;
-			
-		case ST_pause:
-			//wait for button to be pressed in order to restart game
-			if (!tmpA){
-				break;
-			}
-			//if button is pressed restart game by setting state to ST_B0
-			state = ST_B0;
-			break;
-			
-		case ST_victory:
-			if(!tmpA){
-				break;
-			}
-			LCD_ClearScreen();
-			state = ST_B0;
-			break;
-
-		default:
-			break;
-
-	}
-	
-
-	switch(state){
-
-		case Start:
-			break;
-
-		case ST_B0:
-			tmpB = 0x01;
-			break;
-
-		case ST_B1:
-			tmpB = 0x02;
-			break;
-
-		case ST_B2:
-			tmpB = 0x04;
-			break;
-		
-		case ST_wait:	
-			LCD_Cursor(1);
-			LCD_WriteData(cnt + '0');
-			break;
-		
-		case ST_pause:
-			break;
-			
-		case ST_victory:
 			cnt = 0;
-			LCD_DisplayString(1, "Winner")
+			score = 5;
+			win = 0;
+			LCD_Cursor(1);
+			LCD_WriteData(score + '0');
 			break;
-
+		case L1:
+			if (!tmpA && cnt >= 5) {
+				state = L2;
+				cnt = 0;
+				from = 1;
+			}
+			else if (tmpA) {
+				state = PRESS;
+				cnt = 0;
+				x = 0;
+				press(x);
+			}
+			break;
+		case L2:
+			if (!tmpA && cnt >= 5 && from) {
+				state = L3;
+				cnt = 0;
+				from = 0;
+			}
+			else if (!tmpA && cnt >= 5 && !from) {
+				state = L1;
+				cnt = 0;
+			}
+			else if (tmpA) {
+				state = PRESS;
+				cnt = 0;
+				x = 1;
+				press(x);
+			}
+			break;
+		case L3:
+			if (!tmpA && cnt >= 5) {
+				state = L2;
+				cnt = 0;
+			}
+			else if (tmpA) {
+				state = PRESS;
+				cnt = 0;
+				x = 0;
+				press(x);
+			}
+			break;
+		case PRESS:
+			if (!tmpA) {
+				state = WAIT_1;
+			}
+			break;
+		case WAIT_1:
+			if (tmpA) {
+				state = WAIT_2;
+			}
+			break;
+		case WAIT_2:
+			if (!tmpA) {
+				if (win == 1) {
+					LCD_ClearScreen();
+					LCD_Cursor(1);
+					LCD_WriteData(score + '0');
+					win = 0;
+				}
+			}
+			break;
 		default:
+			state = Start;
 			break;
+	}
 
+	switch(state) {
+		case Start:
+			state = L1;
+			break;
+		case L1:
+			tmpB = 0x01;
+			cnt++;
+			break;
+		case L2:
+			tmpB = 0x02;
+			cnt++;
+			break;
+		case L3:
+			tmpB = 0x04;
+			cnt++;
+			break;
+		case PRESS:
+			break;
+		case WAIT_1:
+			break;
+		case WAIT_2:
+			break;
+		default:
+			state = Start;
+			break;
 	}
 
 	PORTB = tmpB;
@@ -164,24 +159,18 @@ void Tick(){
 
 
 int main(void){
-
 	DDRA = 0x00; PORTA = 0xFF; // Configure port A's 8 pins as inputs, initialize to 1s
-
 	DDRB = 0xFF; PORTB = 0x00; // Configure port B's 8 pins as inputs, initialize to 1s
-
-	
-
+	DDRC = 0xFF; PORTC = 0x00; // LCD data lines
+	DDRD = 0xFF; PORTD = 0x00; // LCD control lines
 	// Initialize outputs
 
 	PORTB = 0x00;
-	bLeft = 0x01;
-
 	state = Start;
-	cnt = 0;
-	LCD_ClearScreen();
-	LCD_Cursor(1);
 	
-	TimerSet(300);
+	LCD_Init();
+	
+	TimerSet(100);
 	TimerOn();
 
 	while(1){
