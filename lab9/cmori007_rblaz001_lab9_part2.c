@@ -94,7 +94,7 @@ void dec(){
 }
 
 
-enum States {Start, ST_wait, ST_toggle, ST_up, ST_down} state;
+enum States {Start, ST_wait, ST_toggle, ST_update} state;
 
 
 
@@ -117,12 +117,12 @@ void Tick(){
 				toggle();
 			}
 			else if (bA1 && !bA2){
-				state = ST_down;
-				inc();
+				state = ST_update;
+				dec();
 			}
 			else if (!bA1 && bA2){
-				state = ST_up;
-				dec();
+				state = ST_update;
+				inc();
 			}
 			
 			break;
@@ -134,17 +134,7 @@ void Tick(){
 			
 			break;
 		
-		case ST_up:
-			if(bA0){
-				state = ST_toggle;
-				toggle();
-			}
-			else if(!bA0 && !bA1 && !bA2){
-				state = ST_wait;
-			}
-			break;
-			
-		case ST_down:
+		case ST_update:
 			if(bA0){
 				state = ST_toggle;
 				toggle();
