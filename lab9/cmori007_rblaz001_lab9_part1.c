@@ -2,7 +2,7 @@
 						      Raudel Blazquez Munoz rblaz001@ucr.edu
  *	Lab Section: 21
  *	Assignment: Lab 9  Exercise 1
- *	Exercise Description: 
+ *	Exercise Description: 3 buttons 3 notes
  *
  *	I acknowledge all content contained herein, excluding template or example
  *	code, is my own original work.

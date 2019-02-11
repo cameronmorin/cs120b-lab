@@ -2,7 +2,7 @@
 						      Raudel Blazquez Munoz rblaz001@ucr.edu
  *	Lab Section: 21
  *	Assignment: Lab 9  Exercise 3
- *	Exercise Description: 
+ *	Exercise Description: One button 5-second melody, plays to completion when pressed.
  *
  *	I acknowledge all content contained herein, excluding template or example
  *	code, is my own original work.
