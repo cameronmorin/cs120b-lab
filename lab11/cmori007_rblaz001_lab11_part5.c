@@ -1,3 +1,13 @@
+/*	Partner(s) Name & E-mail: Cameron Morin cmori007@ucr.edu
+						      Raudel Blazquez Munoz rblaz001@ucr.edu
+ *	Lab Section: 21
+ *	Assignment: Lab 10  Exercise 5
+ *	Exercise Description: 
+ *
+ *	I acknowledge all content contained herein, excluding template or example
+ *	code, is my own original work.
+ */
+
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <bit.h>
@@ -45,20 +55,53 @@ unsigned char gameCursor = 1;
 
 //--------User defined FSMs---------------------------------------------------
 //Enumeration of states.
-enum SM1_States { SM1_Start, SM1_running};
+enum SM1_States { SM1_Start, SM1_wait, SM1_input};
 
 // Monitors button connected to PA0. 
 // When button is pressed, shared variable "pause" is toggled.
 int SMTick1(int state) {
  
+	static unsigned char tmpA;
+	static unsigned char bA2;
+	static unsigned char bA3;
+	static unsigned char bA4; 
+	
+	tmpA = ~PINA;
+	bA2 = GetBit(tmpA,2); //Up
+	bA3 = GetBit(tmpA,3); //Down
+	bA4 = GetBit(tmpA,4); //Pause/Start
 
     //State machine transitions
     switch (state) {
 		case SM1_Start:
-			state = SM1_running;
+			state = SM1_wait;
 			break;
 		
-		case SM1_running:
+		case SM1_wait:
+			if(bA4){
+				isPaused = 1 - isPaused; //Toggle isPaused
+				state = SM1_input;
+			}
+			else if(bA2 && !bA3){ //move up
+				if(gameCursor > 16){
+					gameCursor = gameCursor - 16;
+					LCD_Cursor(gameCursor);
+				}
+				state = SM1_input;
+			}
+			else if(!bA2 && bA3){
+				if(gameCursor <= 16){
+					gameCursor = gameCursor + 16;
+					LCD_Cursor(gameCursor);
+				}
+				state = SM1_input;
+			}
+			break;
+		
+		case SM1_input:
+			if(!bA2 && !bA3 && !bA4){
+				state = SM1_wait;
+			}
 			break;
 		
 		default:
@@ -71,7 +114,10 @@ int SMTick1(int state) {
         case SM1_Start:
 			break;
         
-        case SM1_running:
+        case SM1_wait:
+			break;
+			
+		case SM1_input:
 			break;
         
         default:
@@ -119,7 +165,7 @@ enum SM3_States { SM3_Start, SM3_pause, SM3_running, SM3_loss };
 int SMTick3(int state) {
     //State machine transitions
 
-	static const unsigned char PHRASE[] = "#        #    #      #          ";
+	static const unsigned char PHRASE[] = "   #     #    #      #          ";
 	static const unsigned char GAMELOSS[] = "    YOU LOST        GET GOOD    ";
 	static unsigned char cnt = 0;
 	static unsigned char i = 0;
@@ -128,6 +174,8 @@ int SMTick3(int state) {
     switch (state) {
 		case SM3_Start:
 			state = SM3_pause;
+			LCD_DisplayString(1, PHRASE);
+			LCD_Cursor(gameCursor);
 			break;
 		case SM3_pause:
 			if(!isPaused){
@@ -141,14 +189,19 @@ int SMTick3(int state) {
 			
 			if(isCollided){
 				state = SM3_loss;
+				isPaused = 1;
+				gameCursor = 1;
+				i = 0;
+				cnt = 0;
+				LCD_DisplayString(1, GAMELOSS);
+				LCD_Cursor(gameCursor);
 			}
 			
 			break;
 		case SM3_loss:
-			if(!isCollided && !isPaused){
+			if(!isPaused){
+				isCollided = 0;
 				state = SM3_running;
-			}else if(!isCollided && isPaused){
-				state = SM3_pause;
 			}
 			break;
 		default:
@@ -159,12 +212,15 @@ int SMTick3(int state) {
 		case SM3_Start:
 			break;
 		case SM3_pause:
-			LCD_DisplayString(1, PHRASE);
-			LCD_Cursor(gameCursor);
 			break;
 		case SM3_running:
 			if(cnt < (PHRASE_SIZE + 31)){
 				for(unsigned char j=0; j < 32; j++){
+					
+					if((PHRASE[ (i+j) % (PHRASE_SIZE - 1)] == '#') && ((j+1) == gameCursor)){
+						isCollided = 1;
+					}
+					
 					LCD_Cursor(j+1);
 					LCD_WriteData(PHRASE[ (i+j) % (PHRASE_SIZE - 1)]);
 					LCD_Cursor(gameCursor);
@@ -178,8 +234,6 @@ int SMTick3(int state) {
 			}
 			break;
 		case SM3_loss:
-			LCD_DisplayString(1, GAMELOSS);
-			LCD_Cursor(gameCursor);
 			break;
 		default:
 			break;
@@ -232,7 +286,7 @@ int main()
 {
 // Set Data Direction Registers
 // Buttons PORTA[0-7], set AVR PORTA to pull down logic
-DDRA = 0xFF; PORTA = 0x00;
+DDRA = 0xE3; PORTA = 0x1C;
 DDRC = 0x00; PORTC = 0xFF;
 DDRB = 0xFF; PORTB = 0x00;
 DDRD = 0xFF; PORTD = 0x00;

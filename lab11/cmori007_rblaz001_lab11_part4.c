@@ -1,3 +1,13 @@
+/*	Partner(s) Name & E-mail: Cameron Morin cmori007@ucr.edu
+						      Raudel Blazquez Munoz rblaz001@ucr.edu
+ *	Lab Section: 21
+ *	Assignment: Lab 10  Exercise 4
+ *	Exercise Description: 
+ *
+ *	I acknowledge all content contained herein, excluding template or example
+ *	code, is my own original work.
+ */
+
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <bit.h>
@@ -90,7 +100,7 @@ int SMTick1(int state) {
 		
 				sm1_output = '\0';
 
-    			PORTC = 0xEF; // Enable col 4 with 0, disable others with 1’s
+    			PORTC = 0xEF; // Enable col 4 with 0, disable others with 1ï¿½s
     			asm("nop"); // add a delay to allow PORTC to stabilize before checking
     			if (GetBit(PINC,0)==0) { sm1_output = '1'; }
     			if (GetBit(PINC,1)==0) { sm1_output = '4'; }
@@ -98,7 +108,7 @@ int SMTick1(int state) {
     			if (GetBit(PINC,3)==0) { sm1_output = '*'; }
 
     			// Check keys in col 2
-    			PORTC = 0xDF; // Enable col 5 with 0, disable others with 1’s
+    			PORTC = 0xDF; // Enable col 5 with 0, disable others with 1ï¿½s
     			asm("nop"); // add a delay to allow PORTC to stabilize before checking
     			if (GetBit(PINC,0)==0) { sm1_output = '2'; }
 				if (GetBit(PINC,1)==0) { sm1_output = '5'; }
@@ -107,7 +117,7 @@ int SMTick1(int state) {
     			// ... *****FINISH*****
 
     			// Check keys in col 3
-    			PORTC = 0xBF; // Enable col 6 with 0, disable others with 1’s
+    			PORTC = 0xBF; // Enable col 6 with 0, disable others with 1ï¿½s
     			asm("nop"); // add a delay to allow PORTC to stabilize before checking
 				if (GetBit(PINC,0)==0) { sm1_output = '3'; }
 				if (GetBit(PINC,1)==0) { sm1_output = '6'; }
@@ -117,7 +127,7 @@ int SMTick1(int state) {
 
     			// Check keys in col 4
     			// ... *****FINISH*****
-				PORTC = 0x7F; // Enable col 6 with 0, disable others with 1’s
+				PORTC = 0x7F; // Enable col 6 with 0, disable others with 1ï¿½s
 				asm("nop"); // add a delay to allow PORTC to stabilize before checking
 				if (GetBit(PINC,0)==0) { sm1_output = 'A'; }
 				if (GetBit(PINC,1)==0) { sm1_output = 'B'; }
